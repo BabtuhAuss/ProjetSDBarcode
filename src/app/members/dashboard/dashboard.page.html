@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="logout()">
+        <ion-icon name="power" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Historique</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content>
+    <ion-button (click)="toggleInfiniteScroll()" expand="block">
+      Toggle Infinite Scroll
+    </ion-button>
+  
+    <ion-list>
+      <ion-item *ngFor="let item of items" no-padding>
+        <app-item-produit [produit]="item"></app-item-produit>
+      </ion-item>
+    </ion-list>
+  
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+ 
+    <!-- fab placed to the bottom end -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+</ion-content>
