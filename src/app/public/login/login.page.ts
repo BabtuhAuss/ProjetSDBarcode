@@ -27,7 +27,6 @@ export class LoginPage implements OnInit {
     login() {
     console.log(this.user + '-'+this.password);
 
-
     if(!this.authService.login(this.user,this.password)){
       this.verifLogin = false;
     }else{

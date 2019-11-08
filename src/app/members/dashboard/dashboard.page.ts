@@ -3,6 +3,7 @@ import { Component, OnInit , ViewChild } from '@angular/core';
 import { IonInfiniteScroll } from '@ionic/angular';
 import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +20,7 @@ export class DashboardPage implements OnInit {
   compteurBaseDeDonnee =0;
 
 
-  constructor(private authService: AuthenticationService) { 
+  constructor(private authService: AuthenticationService, private barcodeScanner: BarcodeScanner) { 
     this.addMoreItems();
   }
  
@@ -41,18 +42,43 @@ export class DashboardPage implements OnInit {
   ngOnInit() {
   }
  
+  addItem(code:number,nom:string){
+    let produit = new Produit(code, nom); 
+    //let componentItem = new ItemProduitComponent(i);
+    this.items.push(produit);
+  }
+
+  search(code:number){
+    //faire la requete à la base de donnée pour la recherche du produit: 
+    //TODO requete HTTP : Response Json parse into item with addItem();
+    
+    //s'il ne le trouve pas; créer une alerte pour savoir s'il veut ajouter les informations de la page.
+    // si oui : faire une page d'ajout.
+    // si non, retour à l'historique.
+  }
+
+
   addMoreItems(){
 
     //récupération des items de l'historique 20 par 20 pour une bonne optimisation
     //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
-    for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 20; i++){
+    for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 5; i++){
       let produit = new Produit(i, 'NOM DU PRODUIT'); 
       //let componentItem = new ItemProduitComponent(i);
       this.items.push(produit);
     }
-    this.compteurBaseDeDonnee += 20;
+    this.compteurBaseDeDonnee += 5;
   }
   
+  scanBarcode(){
+    this.barcodeScanner.scan().then(barcodeData => {
+      console.log('Barcode data', barcodeData);
+      this.addItem(12,"test");
+     }).catch(err => {
+         console.log('Error', err);
+     });
+  }
+
   logout() {
     this.authService.logout();
   }

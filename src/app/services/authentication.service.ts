@@ -34,17 +34,6 @@ export class AuthenticationService {
     })
   }
  
-  public isLogged():boolean{
-    this.verifyIfLogged = false;
-    this.storage.get(TOKEN_KEY).then(result => {
-      if(result){
-        console.log("connecté");
-        this.verifyIfLogged = true;
-      }
-    });
-    return this.verifyIfLogged;
-  }
-
   login(pUser:string, pPassword:string) {
 
     //faire la verification de l'utilisateur
