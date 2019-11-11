@@ -35,6 +35,15 @@ export class AuthenticationService {
     })
   }
  
+  getCurrentUser(){
+    let user = "";
+    this.storage.get(TOKEN_KEY).then(res => {user = res;})
+    console.log("user : "+user);
+
+    return user;
+
+  }
+
   public isLogged():boolean{
     this.verifyIfLogged = false;
     this.storage.get(TOKEN_KEY).then(result => {
