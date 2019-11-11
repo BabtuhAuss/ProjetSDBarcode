@@ -11,7 +11,7 @@ export class LoginPage implements OnInit {
   currentlyLogged : boolean;
   user : '';
   password : '';
-  verifLogin :boolean;
+  verifLogin = false;
   constructor(private authService: AuthenticationService) { 
   }
   ngOnInit() {

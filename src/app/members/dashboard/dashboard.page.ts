@@ -50,32 +50,39 @@ errorMsg = '';
   getHistoriqueHttp(pUser:string){
     let json = {
       user : pUser,
+      debut : this.compteurBaseDeDonnee
     }
 
+    console.log("user pour la requete :" + pUser);
     let httpoption = {headers : new HttpHeaders({
       'Content-Type' : 'application/json',
       'Access-Control-Allow-Origin':'*'
     })};
 
-    this.http.post('http://192.168.0.158:5000/login', json, httpoption).subscribe(
+    this.http.post('http://192.168.0.158:5000/getHistorique', json, httpoption).subscribe(
       data=>{
-        console.log(data);
+        console.log("data" + data);
+        if(data['result']=="Il n'y a aucun produit dans votre historique"){
+          this.errorMsg = data['result'];
+        }
+        else{
+          for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 20; i++){
+            let produit = new Produit(i, 'NOM DU PRODUIT'); 
+            //let componentItem = new ItemProduitComponent(i);
+            this.items.push(produit);
+          }
+          this.compteurBaseDeDonnee += 20;
+        }
       }
     )
   }
 
 
   addMoreItems(){
-    //this.getHistoriqueHttp(this.authService.getLogin());
-    //this.getHistoriqueHttp(this.authService.getLogin());
+    this.getHistoriqueHttp(this.authService.currentUser);
     //récupération des items de l'historique 20 par 20 pour une bonne optimisation
     //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
-    for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 20; i++){
-      let produit = new Produit(i, 'NOM DU PRODUIT'); 
-      //let componentItem = new ItemProduitComponent(i);
-      this.items.push(produit);
-    }
-    this.compteurBaseDeDonnee += 20;
+    
   }
   
   logout() {

@@ -12,8 +12,7 @@ const TOKEN_KEY = 'auth-token';
 
 export class AuthenticationService {
  
-  name : '';
-  password:'';
+  public currentUser : string;
 
   verifyIfLogged =false;
   
@@ -31,17 +30,10 @@ export class AuthenticationService {
       if (res) {
         this.verifyIfLogged = true;
         this.authenticationState.next(true);
+        this.currentUser = res;
+        console.log("user : "+this.currentUser)
       }
     })
-  }
- 
-  getCurrentUser(){
-    let user = "";
-    this.storage.get(TOKEN_KEY).then(res => {user = res;})
-    console.log("user : "+user);
-
-    return user;
-
   }
 
   public isLogged():boolean{
@@ -53,16 +45,6 @@ export class AuthenticationService {
       }
     });
     return this.verifyIfLogged;
-  }
-
-  getLogin(){
-    let log = '';
-    this.storage.get(TOKEN_KEY).then(data => 
-      {
-        log = data;
-      });
-      console.log(log);
-      return log;
   }
 
   requeteLogin(pUser:string,pPassword:string){
@@ -83,6 +65,7 @@ export class AuthenticationService {
           this.verifyIfLogged=true;
           this.storage.set(TOKEN_KEY, pUser).then(() => {
             this.authenticationState.next(true);
+            this.currentUser = pUser;
           });
         }
         else{
@@ -109,6 +92,7 @@ export class AuthenticationService {
     this.verifyIfLogged = false;
     return this.storage.remove(TOKEN_KEY).then(() => {
       this.authenticationState.next(false);
+      this.currentUser = '';
     });
   }
  
