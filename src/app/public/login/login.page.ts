@@ -11,12 +11,9 @@ export class LoginPage implements OnInit {
   currentlyLogged : boolean;
   user : '';
   password : '';
-  verifLogin = true;
+  verifLogin :boolean;
   constructor(private authService: AuthenticationService) { 
   }
-
-
-  
   ngOnInit() {
     
   }
@@ -33,7 +30,7 @@ export class LoginPage implements OnInit {
     }else{
       this.verifLogin = true;
     }
-    console.log(this.authService.login(this.user, this.password));
+    //console.log(this.authService.login(this.user, this.password));
   }
  
 }

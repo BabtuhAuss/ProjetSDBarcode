@@ -3,13 +3,19 @@ import { Component, OnInit , ViewChild } from '@angular/core';
 import { IonInfiniteScroll } from '@ionic/angular';
 import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const token_key = 'auth-token';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
+
 export class DashboardPage implements OnInit {
+
+errorMsg = '';
 
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
@@ -19,7 +25,7 @@ export class DashboardPage implements OnInit {
   compteurBaseDeDonnee =0;
 
 
-  constructor(private authService: AuthenticationService) { 
+  constructor(private authService: AuthenticationService, private http: HttpClient) { 
     this.addMoreItems();
   }
  
@@ -40,9 +46,28 @@ export class DashboardPage implements OnInit {
   }
   ngOnInit() {
   }
- 
-  addMoreItems(){
 
+  getHistoriqueHttp(pUser:string){
+    let json = {
+      user : pUser,
+    }
+
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+
+    this.http.post('http://192.168.0.158:5000/login', json, httpoption).subscribe(
+      data=>{
+        console.log(data);
+      }
+    )
+  }
+
+
+  addMoreItems(){
+    //this.getHistoriqueHttp(this.authService.getLogin());
+    //this.getHistoriqueHttp(this.authService.getLogin());
     //récupération des items de l'historique 20 par 20 pour une bonne optimisation
     //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
     for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 20; i++){
