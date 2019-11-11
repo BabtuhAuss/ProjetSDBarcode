@@ -66,12 +66,18 @@ errorMsg = '';
           this.errorMsg = data['result'];
         }
         else{
-          for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 20; i++){
-            let produit = new Produit(i, 'NOM DU PRODUIT'); 
+          let compteur = 0
+          for(let i in data){
+            let testProduit = data[i] as Produit;
+            this.items.push(testProduit);
+            
+            //let produit = new Produit(i['code'], i['nom']); 
             //let componentItem = new ItemProduitComponent(i);
-            this.items.push(produit);
+            //this.items.push(produit);
+            compteur++;
           }
-          this.compteurBaseDeDonnee += 20;
+          console.log(compteur);
+          this.compteurBaseDeDonnee += compteur;
         }
       }
     )
@@ -79,7 +85,10 @@ errorMsg = '';
 
 
   addMoreItems(){
+
     this.getHistoriqueHttp(this.authService.currentUser);
+
+    
     //récupération des items de l'historique 20 par 20 pour une bonne optimisation
     //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
     
