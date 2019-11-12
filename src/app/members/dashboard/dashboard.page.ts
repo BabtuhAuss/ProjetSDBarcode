@@ -73,6 +73,7 @@ export class DashboardPage implements OnInit {
   scanBarcode(){
     this.barcodeScanner.scan().then(barcodeData => {
       console.log('Barcode data', barcodeData);
+      
       this.addItem(12,"test");
      }).catch(err => {
          console.log('Error', err);
