@@ -4,6 +4,7 @@ import { IonInfiniteScroll } from '@ionic/angular';
 import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { computeStackId } from '@ionic/angular/dist/directives/navigation/stack-utils';
 
 const token_key = 'auth-token';
 
@@ -29,6 +30,29 @@ errorMsg = '';
     this.addMoreItems();
   }
  
+  addHistorique(pBareCode:number){
+    let json = {
+      barCode : pBareCode,
+    }
+
+    console.log("Le code barre scanné est : "+pBareCode);
+
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+
+    this.http.post('http://192.168.43.6:5000/addHistorique', json, httpoption).subscribe(
+      data=>{
+        console.log("data"+data);
+        if(data['result'] == "bon"){
+          console.log("ouvrir la page produit");
+        }
+      }
+    );
+  }
+
+
   loadData(event) {
     setTimeout(() => {
       console.log('Done');
@@ -59,7 +83,7 @@ errorMsg = '';
       'Access-Control-Allow-Origin':'*'
     })};
 
-    this.http.post('http://192.168.0.158:5000/getHistorique', json, httpoption).subscribe(
+    this.http.post('http://192.168.43.6:5000/getHistorique', json, httpoption).subscribe(
       data=>{
         console.log("data" + data);
         if(data['result']=="Il n'y a aucun produit dans votre historique"){
@@ -83,10 +107,6 @@ errorMsg = '';
   addMoreItems(){
 
     this.getHistoriqueHttp(this.authService.currentUser);
-
-    
-    //récupération des items de l'historique 20 par 20 pour une bonne optimisation
-    //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
     
   }
   

@@ -59,7 +59,7 @@ export class AuthenticationService {
       'Access-Control-Allow-Origin':'*'
     })};
 
-    this.http.post('http://192.168.0.158:5000/login', json,httpoption).subscribe(
+    this.http.post('http://192.168.43.6:5000/login', json,httpoption).subscribe(
       data=>{
         console.log(data);
         if(data['value'] == true){
