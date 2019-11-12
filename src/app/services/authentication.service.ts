@@ -36,6 +36,7 @@ export class AuthenticationService {
     })
   }
 
+
   public isLogged():boolean{
     this.verifyIfLogged = false;
     this.storage.get(TOKEN_KEY).then(result => {
