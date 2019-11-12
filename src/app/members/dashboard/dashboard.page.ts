@@ -30,12 +30,14 @@ errorMsg = '';
     this.addMoreItems();
   }
  
-  addHistorique(pBareCode:number){
+  addHistorique(pBareCode:string, pUser:string){
     let json = {
       barCode : pBareCode,
+      user : pUser
     }
 
     console.log("Le code barre scanné est : "+pBareCode);
+    console.log("Le user est "+pUser)
 
     let httpoption = {headers : new HttpHeaders({
       'Content-Type' : 'application/json',
