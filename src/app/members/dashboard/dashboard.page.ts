@@ -4,13 +4,20 @@ import { IonInfiniteScroll } from '@ionic/angular';
 import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const token_key = 'auth-token';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
+
 export class DashboardPage implements OnInit {
+
+errorMsg = '';
 
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
@@ -20,7 +27,8 @@ export class DashboardPage implements OnInit {
   compteurBaseDeDonnee =0;
 
 
-  constructor(private authService: AuthenticationService, private barcodeScanner: BarcodeScanner) { 
+
+  constructor(private authService: AuthenticationService, private barcodeScanner: BarcodeScanner, private http: HttpClient) { 
     this.addMoreItems();
   }
  
@@ -41,33 +49,45 @@ export class DashboardPage implements OnInit {
   }
   ngOnInit() {
   }
- 
-  addItem(code:number,nom:string){
-    let produit = new Produit(code, nom); 
-    //let componentItem = new ItemProduitComponent(i);
-    this.items.push(produit);
-  }
 
-  search(code:number){
-    //faire la requete à la base de donnée pour la recherche du produit: 
-    //TODO requete HTTP : Response Json parse into item with addItem();
-    
-    //s'il ne le trouve pas; créer une alerte pour savoir s'il veut ajouter les informations de la page.
-    // si oui : faire une page d'ajout.
-    // si non, retour à l'historique.
+  getHistoriqueHttp(pUser:string){
+    let json = {
+      user : pUser,
+      debut : this.compteurBaseDeDonnee
+    }
+
+    console.log("user pour la requete :" + pUser);
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+
+    this.http.post('http://192.168.0.158:5000/getHistorique', json, httpoption).subscribe(
+      data=>{
+        console.log("data" + data);
+        if(data['result']=="Il n'y a aucun produit dans votre historique"){
+          this.errorMsg = data['result'];
+        }
+        else{
+          let compteur = 0
+          for(let i in data){
+            let testProduit = data[i] as Produit;
+            this.items.push(testProduit);
+            compteur++;
+          }
+          console.log(compteur);
+          this.compteurBaseDeDonnee += compteur;
+        }
+      }
+    )
   }
 
 
   addMoreItems(){
 
-    //récupération des items de l'historique 20 par 20 pour une bonne optimisation
-    //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
-    for(let i = this.compteurBaseDeDonnee; i < this.compteurBaseDeDonnee+ 5; i++){
-      let produit = new Produit(i, 'NOM DU PRODUIT'); 
-      //let componentItem = new ItemProduitComponent(i);
-      this.items.push(produit);
-    }
-    this.compteurBaseDeDonnee += 5;
+    this.getHistoriqueHttp(this.authService.currentUser);
+
+    
   }
   
   scanBarcode(){

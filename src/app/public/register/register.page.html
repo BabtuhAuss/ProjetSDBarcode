@@ -8,5 +8,31 @@
 </ion-header>
  
 <ion-content padding>
- En maintenance...
+  <form (ngSubmit) = "signIn($event)">
+    <div *ngIf="errorMsg != ''; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>{{errorMsg}}</ng-template>
+    <ng-template #elseBlock>Veuillez entrer vos informations :</ng-template>
+    <ion-item>
+      <ion-label position="floating">Login</ion-label>
+      <ion-input clearInput type="text" name="pUser" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input clearInput type="password" name="pPassword"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Confirmer</ion-label>
+      <ion-input clearInput type="password" name="pPassword1"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nom</ion-label>
+      <ion-input clearInput type="text" name="pNom"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Prénom</ion-label>
+      <ion-input clearInput type="text" name="pPrenom"></ion-input>
+    </ion-item>
+    
+    <ion-button type="submit" padding="10px" expand="block" color="danger">Appuie</ion-button>
+  </form>
 </ion-content>
