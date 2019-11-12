@@ -70,10 +70,6 @@ errorMsg = '';
           for(let i in data){
             let testProduit = data[i] as Produit;
             this.items.push(testProduit);
-            
-            //let produit = new Produit(i['code'], i['nom']); 
-            //let componentItem = new ItemProduitComponent(i);
-            //this.items.push(produit);
             compteur++;
           }
           console.log(compteur);
