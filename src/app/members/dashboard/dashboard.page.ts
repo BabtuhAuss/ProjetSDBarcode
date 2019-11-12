@@ -3,11 +3,9 @@ import { Component, OnInit , ViewChild } from '@angular/core';
 import { IonInfiniteScroll } from '@ionic/angular';
 import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const token_key = 'auth-token';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -27,8 +25,7 @@ errorMsg = '';
   compteurBaseDeDonnee =0;
 
 
-
-  constructor(private authService: AuthenticationService, private barcodeScanner: BarcodeScanner, private http: HttpClient) { 
+  constructor(private authService: AuthenticationService, private http: HttpClient) { 
     this.addMoreItems();
   }
  
@@ -88,18 +85,11 @@ errorMsg = '';
     this.getHistoriqueHttp(this.authService.currentUser);
 
     
+    //récupération des items de l'historique 20 par 20 pour une bonne optimisation
+    //dans la requète select, définir une clause "where id > compteurBaseDeDonnee and id < compteurBaseDeDonnee + 20"
+    
   }
   
-  scanBarcode(){
-    this.barcodeScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-      
-      this.addItem(12,"test");
-     }).catch(err => {
-         console.log('Error', err);
-     });
-  }
-
   logout() {
     this.authService.logout();
   }
