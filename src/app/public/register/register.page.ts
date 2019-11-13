@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +27,7 @@ export class RegisterPage implements OnInit {
       'Access-Control-Allow-Origin':'*'
     })};
 
-    this.http.post('http://192.168.43.6:5000/register', json, httpoption).subscribe(
+    this.http.post(environment.adressePython, json, httpoption).subscribe(
       data=>{
         console.log(data);
         if(data['result'] == "added"){
