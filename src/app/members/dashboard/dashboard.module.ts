@@ -22,7 +22,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+  ],
+  providers: [
+    BarcodeScanner,
   ],
   declarations: [DashboardPage,ItemProduitComponent],
   providers : [BarcodeScanner]

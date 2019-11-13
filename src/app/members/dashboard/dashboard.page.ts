@@ -5,6 +5,9 @@ import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computeStackId } from '@ionic/angular/dist/directives/navigation/stack-utils';
+ 
+import { environment } from 'src/environments/environment';
+
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 const token_key = 'auth-token';
@@ -54,12 +57,14 @@ errorMsg = '';
       'Content-Type' : 'application/json',
       'Access-Control-Allow-Origin':'*'
     })};
-
-    this.http.post('http://192.168.43.6:5000/addHistorique', json, httpoption).subscribe(
+    var adresseRequest = environment.adressePython+"/addHistorique"
+    console.log("ladresse du python est "+adresseRequest)
+    this.http.post(adresseRequest , json, httpoption).subscribe(
       data=>{
         console.log("data"+data);
         if(data['result'] == "bon"){
           console.log("ouvrir la page produit");
+          //renvoie vers la page produit
         }
       }
     );
@@ -95,8 +100,8 @@ errorMsg = '';
       'Content-Type' : 'application/json',
       'Access-Control-Allow-Origin':'*'
     })};
-
-    this.http.post('http://192.168.43.6:5000/getHistorique', json, httpoption).subscribe(
+    var adresseRequest = environment.adressePython+"/getHistorique"
+    this.http.post(adresseRequest, json, httpoption).subscribe(
       data=>{
         console.log("data" + data);
         if(data['result']=="Il n'y a aucun produit dans votre historique"){
@@ -118,9 +123,7 @@ errorMsg = '';
 
 
   addMoreItems(){
-
-    this.getHistoriqueHttp(this.authService.currentUser);
-    
+    this.getHistoriqueHttp(this.authService.currentUser);  
   }
   
   logout() {
