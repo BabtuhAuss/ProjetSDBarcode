@@ -5,7 +5,7 @@ import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computeStackId } from '@ionic/angular/dist/directives/navigation/stack-utils';
- 
+import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
@@ -30,7 +30,7 @@ errorMsg = '';
   compteurBaseDeDonnee =0;
 
 
-  constructor(private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner) { 
+  constructor(private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
     this.addMoreItems();
   }
  
@@ -39,6 +39,7 @@ errorMsg = '';
   scanBarcode(){
     this.barcodeScanner.scan().then(barcodeData => {
       console.log('Barcode data', barcodeData);
+      this.storage.set('barcode', barcodeData);
       this.addHistorique(barcodeData.text);
      }).catch(err => {
          console.log('Error', err);
