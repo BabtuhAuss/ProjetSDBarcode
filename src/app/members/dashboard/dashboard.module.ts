@@ -9,6 +9,7 @@ import { DashboardPage } from './dashboard.page';
 
 import {ItemProduitComponent} from './item-produit/item-produit.component';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+
 const routes: Routes = [
   {
     path: '',
@@ -26,6 +27,7 @@ const routes: Routes = [
   providers: [
     BarcodeScanner,
   ],
-  declarations: [DashboardPage,ItemProduitComponent]
+  declarations: [DashboardPage,ItemProduitComponent],
+  providers : [BarcodeScanner]
 })
 export class DashboardPageModule {}

@@ -5,7 +5,10 @@ import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computeStackId } from '@ionic/angular/dist/directives/navigation/stack-utils';
+ 
 import { environment } from 'src/environments/environment';
+
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 const token_key = 'auth-token';
 
@@ -27,13 +30,25 @@ errorMsg = '';
   compteurBaseDeDonnee =0;
 
 
-  constructor(private authService: AuthenticationService, private http: HttpClient) { 
+  constructor(private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner) { 
     this.addMoreItems();
   }
  
-  addHistorique(pBareCode:number){
+
+
+  scanBarcode(){
+    this.barcodeScanner.scan().then(barcodeData => {
+      console.log('Barcode data', barcodeData);
+      this.addHistorique(barcodeData.text);
+     }).catch(err => {
+         console.log('Error', err);
+     });
+  }
+
+  addHistorique(pBareCode:string){
     let json = {
       barCode : pBareCode,
+      user: this.authService.currentUser
     }
 
     console.log("Le code barre scanné est : "+pBareCode);
