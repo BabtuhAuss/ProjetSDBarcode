@@ -1,9 +1,92 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>produit</ion-title>
+    <ion-title>Produit</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-{{bareCode}}
-</ion-content>
+<ion-grid>
+  <ion-row>
+    <ion-col size="4">
+      {{bareCode}}
+    </ion-col>
+    <ion-col size="8">
+        <img src="" alt="Smiley face" height="42" width="42">
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="6">
+      Description
+    </ion-col>
+    <ion-col>
+      ion-col
+    </ion-col>
+    <ion-col>
+      ion-col
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">
+      ion-col [size="3"]
+    </ion-col>
+    <ion-col>
+      ion-col
+    </ion-col>
+    <ion-col size="3">
+      ion-col [size="3"]
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">
+      ion-col [size="3"]
+    </ion-col>
+    <ion-col size="3" offset="3">
+      ion-col [size="3"] [offset="3"]
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      ion-col
+    </ion-col>
+    <ion-col>
+      ion-col
+      <br>#
+    </ion-col>
+    <ion-col>
+      ion-col
+      <br>#
+      <br>#
+    </ion-col>
+    <ion-col>
+      ion-col
+      <br>#
+      <br>#
+      <br>#
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" size-sm>
+      ion-col [size="12"] [size-sm]
+    </ion-col>
+    <ion-col size="12" size-sm>
+      ion-col [size="12"] [size-sm]
+    </ion-col>
+    <ion-col size="12" size-sm>
+      ion-col [size="12"] [size-sm]
+    </ion-col>
+    <ion-col size="12" size-sm>
+      ion-col [size="12"] [size-sm]
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="6" size-lg offset="3">
+      ion-col [size="6"] [size-lg] [offset="3"]
+    </ion-col>
+    <ion-col size="3" size-lg>
+      ion-col [size="3"] [size-lg]
+    </ion-col>
+  </ion-row>
+</ion-grid>

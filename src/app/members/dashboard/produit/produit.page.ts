@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Produit } from 'src/app/Produit';
 
 @Component({
   selector: 'app-produit',
@@ -9,13 +9,17 @@ import { filter } from 'rxjs/operators';
 })
 export class ProduitPage implements OnInit {
   bareCode: string;
+  produit: Produit;
+
+
   constructor(private route: ActivatedRoute) {  console.log(this.bareCode);}
 
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.bareCode = params["barcode"];
-      console.log(this.bareCode);
+      this.produit = params["produit"];
+      console.log("produit dans la page produit : " + this.produit);
   });
   }
 
