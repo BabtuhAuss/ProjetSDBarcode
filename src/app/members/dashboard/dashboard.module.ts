@@ -27,7 +27,6 @@ const routes: Routes = [
   providers: [
     BarcodeScanner,
   ],
-  declarations: [DashboardPage,ItemProduitComponent],
-  providers : [BarcodeScanner]
+  declarations: [DashboardPage,ItemProduitComponent]
 })
 export class DashboardPageModule {}
