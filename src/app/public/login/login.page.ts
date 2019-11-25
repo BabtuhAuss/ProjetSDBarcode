@@ -11,7 +11,7 @@ export class LoginPage implements OnInit {
   currentlyLogged : boolean;
   user : '';
   password : '';
-  verifLogin = false;
+  errLogin = '';
   constructor(private authService: AuthenticationService) { 
   }
   ngOnInit() {
@@ -25,9 +25,9 @@ export class LoginPage implements OnInit {
     console.log(this.user + '-'+this.password);
 
     if(!this.authService.login(this.user,this.password)){
-      this.verifLogin = false;
+      this.errLogin = 'Mot de passe ou identifiant incorrect !';
     }else{
-      this.verifLogin = true;
+      this.errLogin = '';
     }
     //console.log(this.authService.login(this.user, this.password));
   }
