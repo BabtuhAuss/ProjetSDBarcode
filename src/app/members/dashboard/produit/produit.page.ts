@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Produit } from 'src/app/Produit';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-produit',
@@ -9,18 +11,17 @@ import { Produit } from 'src/app/Produit';
 })
 export class ProduitPage implements OnInit {
   bareCode: string;
-  produit: Produit;
+  nomProduit: Produit;
 
-
-  constructor(private route: ActivatedRoute) {  console.log(this.bareCode);}
+  errorMsg = '';
+  produitSearch : Produit;
+  constructor(private route: ActivatedRoute, private http: HttpClient) {  console.log(this.bareCode);}
 
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.bareCode = params["barcode"];
-      this.produit = params["produit"];
-      console.log("produit dans la page produit : " + this.produit);
+      this.produitSearch = JSON.parse(params["p"]),
+      console.log(this.produitSearch)
   });
   }
-
 }

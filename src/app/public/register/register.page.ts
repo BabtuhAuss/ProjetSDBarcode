@@ -27,7 +27,7 @@ export class RegisterPage implements OnInit {
       'Access-Control-Allow-Origin':'*'
     })};
 
-    this.http.post(environment.adressePython, json, httpoption).subscribe(
+    this.http.post(environment.adressePython+'/register', json, httpoption).subscribe(
       data=>{
         console.log(data);
         if(data['result'] == "added"){

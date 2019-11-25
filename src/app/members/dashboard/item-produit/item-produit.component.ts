@@ -17,8 +17,7 @@ export class ItemProduitComponent implements OnInit {
   redirect(){
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        barcode: this.produit.code,
-        produit : this.produit
+        p : JSON.stringify(this.produit)
       }
     };
     
