@@ -9,6 +9,7 @@ import { DashboardPage } from './dashboard.page';
 
 import {ItemProduitComponent} from './item-produit/item-produit.component';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { ProduitPage } from './produit/produit.page';
 
 const routes: Routes = [
   {

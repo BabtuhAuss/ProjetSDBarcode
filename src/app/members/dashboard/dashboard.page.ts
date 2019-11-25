@@ -1,14 +1,15 @@
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit , ViewChild } from '@angular/core';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { IonInfiniteScroll, NavController } from '@ionic/angular';
 import {ItemProduitComponent} from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computeStackId } from '@ionic/angular/dist/directives/navigation/stack-utils';
- 
+import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
-
+import { NavigationExtras } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { testUserAgent } from '@ionic/core/dist/types/utils/platform';
 
 const token_key = 'auth-token';
 
@@ -30,7 +31,7 @@ errorMsg = '';
   compteurBaseDeDonnee =0;
 
 
-  constructor(private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner) { 
+  constructor(private navCtrl : NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
     this.addMoreItems();
   }
  
@@ -63,11 +64,44 @@ errorMsg = '';
       data=>{
         console.log("data"+data);
         if(data['result'] == "bon"){
-          console.log("ouvrir la page produit");
-          //renvoie vers la page produit
+          console.log("Search(codeBare) pour créer un produit");
+          let produit = this.searchHttp(pBareCode);
+          this.addMoreItems();
+          //this.items.push(produit);
+          let navigationExtras: NavigationExtras = {
+            queryParams: {
+              p : JSON.stringify(produit)
+            }
+        }
+        this.navCtrl.navigateForward(['members','produit'],navigationExtras);
         }
       }
     );
+  }
+
+  searchHttp(pBareCode:string){
+    let json = {
+      barCode : pBareCode,
+    }
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    let testProduit
+    var adresseRequest = environment.adressePython+"/search"
+    this.http.post(adresseRequest, json, httpoption).subscribe(
+      data=>{
+        console.log("data" + data);
+        if(data['result']=="Le produit n'existe pas"){
+          this.errorMsg = data['result'];
+        }
+        else{
+          testProduit = data as Produit;
+          console.log(testProduit);
+          }
+        }
+    );
+    return testProduit;
   }
 
 
@@ -111,6 +145,9 @@ errorMsg = '';
           let compteur = 0
           for(let i in data){
             let testProduit = data[i] as Produit;
+            console.log("i = "+i);
+            console.log("data = "+JSON.stringify(data[i]));
+            console.log("testproduit = "+JSON.stringify(testProduit));
             this.items.push(testProduit);
             compteur++;
           }

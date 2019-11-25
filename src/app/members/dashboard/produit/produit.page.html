@@ -1,0 +1,51 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button slot="start">
+      <ion-icon name="power" name="retour"></ion-icon>
+    </ion-back-button>
+    <ion-title>Produit</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">
+        <h1>{{produitSearch.code}}</h1>
+      </ion-col>
+      <ion-col size="8">
+          <h1>{{produitSearch.nomProduit}}</h1>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+          <img src="{{produitSearch.urlimage}}"/>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+          <ng-template [ngIf]="produitSearch.urlimageing != ''"><img src="{{produitSearch.urlimageing}}"></ng-template>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ng-template [ngIf]="produitSearch.urlimagenut != ''"><img src="{{produitSearch.urlimagenut}}"></ng-template>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+          <ng-template [ngIf]="produitSearch.nutriscore == 'a'"><img width="70%" height="80%" src="assets/nutriscore/nutriA.png"></ng-template>
+          <ng-template [ngIf]="produitSearch.nutriscore == 'b'"><img width="70%" height="80%" src="assets/nutriscore/nutriB.png"></ng-template>
+          <ng-template [ngIf]="produitSearch.nutriscore == 'c'"><img width="70%" height="80%" src="assets/nutriscore/nutriC.png"></ng-template>
+          <ng-template [ngIf]="produitSearch.nutriscore == 'd'"><img width="70%" height="80%" src="assets/nutriscore/nutriD.png"></ng-template>
+          <ng-template [ngIf]="produitSearch.nutriscore == 'e'"><img width="70%" height="80%" src="assets/nutriscore/nutriE.png"></ng-template>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+

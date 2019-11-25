@@ -22,7 +22,7 @@ export class AuthenticationService {
     this.plt.ready().then(() => {
       this.checkToken();
     });
-    console.log(this.verifyIfLogged);
+    console.log("verification login: "+this.verifyIfLogged);
   }
  
   checkToken() {
