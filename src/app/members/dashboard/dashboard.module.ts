@@ -28,6 +28,6 @@ const routes: Routes = [
   providers: [
     BarcodeScanner,
   ],
-  declarations: [DashboardPage,ItemProduitComponent],
+  declarations: [DashboardPage,ItemProduitComponent]
 })
 export class DashboardPageModule {}
