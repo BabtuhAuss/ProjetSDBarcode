@@ -15,8 +15,8 @@
   <ng-template #elseBlock>Voici votre historique</ng-template>
   
 
-  
-  <!-- <ion-list>
+<!--   
+  <ion-list>
       <ion-item *ngFor="let i of items" no-padding>
           <app-item-produit [produit]="i"></app-item-produit>
       </ion-item>
@@ -26,8 +26,10 @@
           <ion-item>
               <app-item-produit [produit]="i"></app-item-produit>
           </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option (click)="unread(item)">Unread</ion-item-option>
+          <ion-item-options side="end" >
+              <ion-item-option (click)="delete(i)" color="danger" expandable>
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+              </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
   </ion-list>

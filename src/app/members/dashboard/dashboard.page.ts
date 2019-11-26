@@ -134,6 +134,7 @@ errorMsg = '';
       'Content-Type' : 'application/json',
       'Access-Control-Allow-Origin':'*'
     })};
+    this.items = []
     var adresseRequest = environment.adressePython+"/getHistorique"
     this.http.post(adresseRequest, json, httpoption).subscribe(
       data=>{
@@ -156,6 +157,22 @@ errorMsg = '';
         }
       }
     )
+  }
+
+  delete(i : Produit){
+    let json = {
+      user : this.authService.currentUser,
+      barCode : i.code
+    }
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    var adresseRequest = environment.adressePython+"/deleteFromHistorique"
+    this.http.post(adresseRequest, json, httpoption);
+
+    this.addMoreItems();
+
   }
 
 
