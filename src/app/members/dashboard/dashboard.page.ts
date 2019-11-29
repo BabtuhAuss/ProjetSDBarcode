@@ -9,7 +9,6 @@ import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { NavigationExtras } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import { testUserAgent } from '@ionic/core/dist/types/utils/platform';
 
 const token_key = 'auth-token';
 
@@ -32,14 +31,13 @@ errorMsg = '';
 
 
   constructor(private navCtrl : NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
-    this.addMoreItems();
+    //this.doRefresh();
   }
  
 
 
   scanBarcode(){
     this.barcodeScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
       this.addHistorique(barcodeData.text);
      }).catch(err => {
          console.log('Error', err);
@@ -59,24 +57,22 @@ errorMsg = '';
       'Access-Control-Allow-Origin':'*'
     })};
     var adresseRequest = environment.adressePython+"/addHistorique"
-    console.log("ladresse du python est "+adresseRequest)
     this.http.post(adresseRequest , json, httpoption).subscribe(
       data=>{
-        console.log("data"+data);
         if(data['result'] == "bon"){
-          console.log("Search(codeBare) pour créer un produit");
+          this.doRefresh();
           let produit = this.searchHttp(pBareCode);
-          this.addMoreItems();
+          //this.addMoreItems();
           //this.items.push(produit);
           let navigationExtras: NavigationExtras = {
             queryParams: {
               p : JSON.stringify(produit)
             }
         }
-        this.navCtrl.navigateForward(['members','produit'],navigationExtras);
+        this.navCtrl.navigateForward(['produit'],navigationExtras);
         }
       }
-    );
+    ); 
   }
 
   searchHttp(pBareCode:string){
@@ -91,13 +87,11 @@ errorMsg = '';
     var adresseRequest = environment.adressePython+"/search"
     this.http.post(adresseRequest, json, httpoption).subscribe(
       data=>{
-        console.log("data" + data);
         if(data['result']=="Le produit n'existe pas"){
           this.errorMsg = data['result'];
         }
         else{
           testProduit = data as Produit;
-          console.log(testProduit);
           }
         }
     );
@@ -107,7 +101,6 @@ errorMsg = '';
 
   loadData(event) {
     setTimeout(() => {
-      console.log('Done');
       event.target.complete();
       this.addMoreItems();
       // App logic to determine if all data is loaded
@@ -121,6 +114,7 @@ errorMsg = '';
     this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
   }
   ngOnInit() {
+    this.doRefresh();
   }
 
   getHistoriqueHttp(pUser:string){
@@ -128,8 +122,6 @@ errorMsg = '';
       user : pUser,
       debut : this.compteurBaseDeDonnee
     }
-
-    console.log("user pour la requete :" + pUser);
     let httpoption = {headers : new HttpHeaders({
       'Content-Type' : 'application/json',
       'Access-Control-Allow-Origin':'*'
@@ -137,7 +129,6 @@ errorMsg = '';
     var adresseRequest = environment.adressePython+"/getHistorique"
     this.http.post(adresseRequest, json, httpoption).subscribe(
       data=>{
-        console.log("data" + data);
         if(data['result']=="Il n'y a aucun produit dans votre historique"){
           this.errorMsg = data['result'];
         }
@@ -145,14 +136,11 @@ errorMsg = '';
           let compteur = 0
           for(let i in data){
             let testProduit = data[i] as Produit;
-            console.log("i = "+i);
-            console.log("data = "+JSON.stringify(data[i]));
-            console.log("testproduit = "+JSON.stringify(testProduit));
             this.items.push(testProduit);
             compteur++;
           }
-          console.log(compteur);
           this.compteurBaseDeDonnee += compteur;
+          console.log("compteur base de données :"+this.compteurBaseDeDonnee);
         }
       }
     )
@@ -162,7 +150,16 @@ errorMsg = '';
   addMoreItems(){
     this.getHistoriqueHttp(this.authService.currentUser);  
   }
-  
+
+
+  doRefresh() {
+    console.log("REFREEEEEEEEEESH");
+    this.items = [];
+    this.compteurBaseDeDonnee = 0;
+    this.addMoreItems();
+  }
+
+
   logout() {
     this.authService.logout();
   }
