@@ -8,44 +8,41 @@
     <ion-title>Historique</ion-title>
   </ion-toolbar>
 </ion-header>
- 
-<ion-content>
-  <div *ngIf="errorMsg != ''; then thenBlock else elseBlock"></div>
-  <ng-template #thenBlock>{{errorMsg}}</ng-template>
-  <ng-template #elseBlock>Voici votre historique</ng-template>
-  
 
-<!--   
+<ion-content>
+  <div *ngIf="errorMsg != ''; then thenBlock"></div>
+  <ng-template #thenBlock>{{errorMsg}}</ng-template>
+  
+  <!-- <ion-list>
+    <ion-item *ngFor="let i of items" no-padding>
+      <app-item-produit [produit]="i"></app-item-produit>
+    </ion-item>
+  </ion-list> -->
   <ion-list>
-      <ion-item *ngFor="let i of items" no-padding>
-          <app-item-produit [produit]="i"></app-item-produit>
+    <ion-item-sliding *ngFor="let i of items" no-padding>
+      <ion-item>
+        <app-item-produit [produit]="i"></app-item-produit>
       </ion-item>
-    </ion-list> -->
-  <ion-list>
-      <ion-item-sliding *ngFor="let i of items" no-padding>
-          <ion-item>
-              <app-item-produit [produit]="i"></app-item-produit>
-          </ion-item>
-          <ion-item-options side="end" >
-              <ion-item-option (click)="delete(i)" color="danger" expandable>
-                  <ion-icon slot="icon-only" name="trash"></ion-icon>
-              </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+      <ion-item-options side="end">
+        <ion-item-option (click)="delete(i)" color="danger" expandable>
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-      <ion-infinite-scroll-content  
-        loadingSpinner="bubbles"
-        loadingText="Loading more data...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
- 
-    <!-- fab placed to the bottom end -->
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button>
-          <ion-icon name="add" (click)="scanBarcode()"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
+  <!-- fab placed to the bottom end -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add" (click)="scanBarcode()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

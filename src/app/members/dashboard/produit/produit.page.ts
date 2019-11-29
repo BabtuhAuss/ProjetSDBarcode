@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { NavController } from '@ionic/angular';
+import { NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-produit',
@@ -15,7 +17,7 @@ export class ProduitPage implements OnInit {
 
   errorMsg = '';
   produitSearch : Produit;
-  constructor(private route: ActivatedRoute, private http: HttpClient) {  console.log(this.bareCode);}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private navCtrl: NavController) {  console.log(this.bareCode);}
 
 
   ngOnInit() {
@@ -23,5 +25,14 @@ export class ProduitPage implements OnInit {
       this.produitSearch = JSON.parse(params["p"]),
       console.log(this.produitSearch)
   });
+  }
+  public modifyProduct(){
+    console.log("modification");
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        produit: JSON.stringify(this.produitSearch)
+      }
+    };
+    this.navCtrl.navigateForward(['members', 'edit-produit'], navigationExtras);
   }
 }
