@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { NavigationExtras } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AlertController } from '@ionic/angular';
 
 const token_key = 'auth-token';
 
@@ -30,10 +31,51 @@ errorMsg = '';
   compteurBaseDeDonnee =0;
 
 
-  constructor(private navCtrl : NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
+  constructor(public alertController: AlertController, private navCtrl : NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
     //this.doRefresh();
   }
  
+  deleteHist(){
+    let json = {
+      user: this.authService.currentUser
+    };
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    var adresseRequest = environment.adressePython+"/deleteHist"
+    this.http.post(adresseRequest, json, httpoption).subscribe(
+      data=>{
+        if(data['result'] == 'delete'){
+          this.doRefresh();
+        }
+      }
+    )
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Suppression !',
+      message: 'Êtes-vous sur de vouloir supprimer votre historique ?',
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Oui',
+          handler: () => {
+            this.deleteHist()
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
 
 
   scanBarcode(){
@@ -72,7 +114,7 @@ errorMsg = '';
         this.navCtrl.navigateForward(['produit'],navigationExtras);
         }
       }
-    ); 
+    );
   }
 
   searchHttp(pBareCode:string){
