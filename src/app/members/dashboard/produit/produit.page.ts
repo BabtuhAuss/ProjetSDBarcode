@@ -22,8 +22,7 @@ export class ProduitPage implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.produitSearch = JSON.parse(params["p"]),
-      console.log(this.produitSearch)
+      this.produitSearch = JSON.parse(params["p"]);
   });
   }
   public modifyProduct(){

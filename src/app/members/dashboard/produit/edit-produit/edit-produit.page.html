@@ -28,7 +28,7 @@
         [interfaceOptions]="customPopoverOptions"
         (ionChange)="modifNutri($event)"
         interface="popover"
-        placeholder="Select One"
+        placeholder="{{(produitEdit.nutriscore != '' || produitEdit.nutriscore != '/')  ? produitEdit.nutriscore : 'Choisissez le nutriscore'}}"
       >
         <ion-select-option value="a">A</ion-select-option>
         <ion-select-option value="b">B</ion-select-option>

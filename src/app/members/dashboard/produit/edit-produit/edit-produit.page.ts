@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 
 export class EditProduitPage implements OnInit {
   options: CameraOptions = {
-    quality: 100,
+    quality: 30,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE
@@ -23,6 +23,7 @@ export class EditProduitPage implements OnInit {
     header: 'Nutriscore',
     subHeader: 'Choisissez le score nutri'
   };
+
 
 
   produitEdit: Produit;
@@ -70,6 +71,7 @@ export class EditProduitPage implements OnInit {
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
       console.log("premier test");
+      var blob = new Blob([imageData], {type: "image/jpeg"});
       this.produitEdit.urlimage = 'data:image/jpeg;base64,' + imageData;
       this.produitEdit.urlimagesmall = 'data:image/jpeg;base64,' + imageData;
       console.log("test2");
