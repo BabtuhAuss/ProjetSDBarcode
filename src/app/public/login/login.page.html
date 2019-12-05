@@ -8,9 +8,9 @@
   <div *ngIf="errorMsg != ''; then thenBlock"></div>
   <ng-template #thenBlock>{{errorMsg}}</ng-template>
   <ion-item>
-      <ion-label position="floating">Login</ion-label>
-      <ion-input clearInput name="login" (keyup)="onLoginKey($event)"></ion-input>
-    </ion-item>
+    <ion-label position="floating">Login</ion-label>
+    <ion-input clearInput name="login" (keyup)="onLoginKey($event)"></ion-input>
+  </ion-item>
   <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input clearInput type="Password" name="password" (keyup)="onPasswordKey($event)"></ion-input>
@@ -19,3 +19,4 @@
   <ion-button (click)="login()" expand="block" >Login</ion-button>
   <ion-button expand="block" color="secondary" routerLink="/register" routerDirection="forward">Register</ion-button>
 </ion-content>
+

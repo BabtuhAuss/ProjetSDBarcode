@@ -3,8 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
 import { AlertController, NavController } from '@ionic/angular';
 import {Location} from '@angular/common';
+import { NavigationExtras } from '@angular/router';
+
 
 @Component({
   selector: 'app-produit',
@@ -17,6 +20,7 @@ export class ProduitPage implements OnInit {
 
   errorMsg = '';
   produitSearch : Produit;
+
   constructor(private route: ActivatedRoute,private nav: NavController, private http: HttpClient, private alertCtrl: AlertController, private _location: Location) {  console.log(this.bareCode);}
 
   signal(pCode : number){
@@ -45,8 +49,16 @@ export class ProduitPage implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.produitSearch = JSON.parse(params["p"]),
-      console.log(this.produitSearch)
+      this.produitSearch = JSON.parse(params["p"]);
   });
+  }
+  public modifyProduct(){
+    console.log("modification");
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        produit: JSON.stringify(this.produitSearch)
+      }
+    };
+    this.navCtrl.navigateForward(['members', 'edit-produit'], navigationExtras);
   }
 }
