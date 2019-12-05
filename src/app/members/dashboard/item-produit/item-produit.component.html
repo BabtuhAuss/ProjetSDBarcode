@@ -1,11 +1,11 @@
   <ion-card>
       <ion-card-header>
         <ion-card-subtitle>Code : {{produit.code}}</ion-card-subtitle>
-        <ion-card-title>{{produit.nomProduit}}<ion-img div="main-image" [src]="produit.urlimage"></ion-img></ion-card-title>
-        
+        <ion-card-title>{{produit.nomProduit}}</ion-card-title>
       </ion-card-header>
     
       <ion-card-content>
+          <ion-img div="main-image" [src]="produit.urlimage"></ion-img>
           <ion-item-sliding id="item100" width="auto">
               <ion-item (click)="redirect()">
                 <ng-template [ngIf]="produit.nutriscore == 'a'"><img src="assets/nutriscore/nutriA.png"></ng-template>
@@ -17,11 +17,6 @@
                   Description
                 </ion-note>
               </ion-item>
-              <ion-item-options side="end">
-                <ion-item-option color="danger" expandable>
-                  <ion-icon slot="icon-only" name="trash"></ion-icon>
-                </ion-item-option>
-              </ion-item-options>
             </ion-item-sliding>
       </ion-card-content>
 </ion-card>

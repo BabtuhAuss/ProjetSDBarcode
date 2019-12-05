@@ -1,7 +1,7 @@
 import { AuthenticationService } from './../../services/authentication.service';
-import { Component, OnInit , ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonInfiniteScroll, NavController } from '@ionic/angular';
-import {ItemProduitComponent} from './item-produit/item-produit.component'
+import { ItemProduitComponent } from './item-produit/item-produit.component'
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computeStackId } from '@ionic/angular/dist/directives/navigation/stack-utils';
@@ -21,85 +21,86 @@ const token_key = 'auth-token';
 
 export class DashboardPage implements OnInit {
 
-errorMsg = '';
+  errorMsg = '';
 
-  @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll, { static: false }) infiniteScroll: IonInfiniteScroll;
 
-  @ViewChild(ItemProduitComponent, {static: false}) child: ItemProduitComponent;
+  @ViewChild(ItemProduitComponent, { static: false }) child: ItemProduitComponent;
 
-  items = []; 
-  compteurBaseDeDonnee =0;
+  items = [];
+  compteurBaseDeDonnee = 0;
 
 
-  constructor(private navCtrl : NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
+  constructor(private navCtrl: NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) {
     this.addMoreItems();
   }
- 
 
 
-  scanBarcode(){
+
+  scanBarcode() {
     this.barcodeScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
       this.addHistorique(barcodeData.text);
-     }).catch(err => {
-         console.log('Error', err);
-     });
+    }).catch(err => {
+      console.log('Error', err);
+    });
   }
 
-  addHistorique(pBareCode:string){
+  addHistorique(pBareCode: string) {
     let json = {
-      barCode : pBareCode,
+      barCode: pBareCode,
       user: this.authService.currentUser
     }
 
-    console.log("Le code barre scanné est : "+pBareCode);
-
-    let httpoption = {headers : new HttpHeaders({
-      'Content-Type' : 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    })};
-    var adresseRequest = environment.adressePython+"/addHistorique"
-    console.log("ladresse du python est "+adresseRequest)
-    this.http.post(adresseRequest , json, httpoption).subscribe(
-      data=>{
-        console.log("data"+data);
-        if(data['result'] == "bon"){
-          console.log("Search(codeBare) pour créer un produit");
+    let httpoption = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      })
+    };
+    var adresseRequest = environment.adressePython + "/addHistorique"
+    this.http.post(adresseRequest, json, httpoption).subscribe(
+      data => {
+        console.log("data" + data);
+        if (data['result'] == "bon") {
           let produit = this.searchHttp(pBareCode);
           this.addMoreItems();
           //this.items.push(produit);
           let navigationExtras: NavigationExtras = {
             queryParams: {
-              p : JSON.stringify(produit)
+              p: JSON.stringify(produit)
             }
-        }
-        this.navCtrl.navigateForward(['members','produit'],navigationExtras);
+          };
+          this.navCtrl.navigateForward(['members', 'produit'], navigationExtras);
+          
+          
         }
       }
     );
   }
 
-  searchHttp(pBareCode:string){
+  searchHttp(pBareCode: string) {
     let json = {
-      barCode : pBareCode,
+      barCode: pBareCode,
     }
-    let httpoption = {headers : new HttpHeaders({
-      'Content-Type' : 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    })};
+    let httpoption = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      })
+    };
     let testProduit
-    var adresseRequest = environment.adressePython+"/search"
+    var adresseRequest = environment.adressePython + "/search"
     this.http.post(adresseRequest, json, httpoption).subscribe(
-      data=>{
+      data => {
         console.log("data" + data);
-        if(data['result']=="Le produit n'existe pas"){
+        if (data['result'] == "Le produit n'existe pas") {
           this.errorMsg = data['result'];
         }
-        else{
+        else {
           testProduit = data as Produit;
           console.log(testProduit);
-          }
         }
+      }
     );
     return testProduit;
   }
@@ -123,46 +124,66 @@ errorMsg = '';
   ngOnInit() {
   }
 
-  getHistoriqueHttp(pUser:string){
+  getHistoriqueHttp(pUser: string) {
     let json = {
-      user : pUser,
-      debut : this.compteurBaseDeDonnee
+      user: pUser,
+      debut: this.compteurBaseDeDonnee
     }
 
-    console.log("user pour la requete :" + pUser);
-    let httpoption = {headers : new HttpHeaders({
-      'Content-Type' : 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    })};
-    var adresseRequest = environment.adressePython+"/getHistorique"
+    let httpoption = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      })
+    };
+    
+    var adresseRequest = environment.adressePython + "/getHistorique"
     this.http.post(adresseRequest, json, httpoption).subscribe(
-      data=>{
+      data => {
         console.log("data" + data);
-        if(data['result']=="Il n'y a aucun produit dans votre historique"){
+        if (data['result'] == "Il n'y a aucun produit dans votre historique") {
           this.errorMsg = data['result'];
         }
-        else{
+        else {
           let compteur = 0
-          for(let i in data){
+          for (let i in data) {
             let testProduit = data[i] as Produit;
-            console.log("i = "+i);
-            console.log("data = "+JSON.stringify(data[i]));
-            console.log("testproduit = "+JSON.stringify(testProduit));
             this.items.push(testProduit);
             compteur++;
           }
-          console.log(compteur);
           this.compteurBaseDeDonnee += compteur;
+
+          //trier la table items en fonction de la date
         }
       }
     )
   }
 
+  delete(i: Produit) {
+    let json = {
+      user: this.authService.currentUser,
+      barCode: i.code
+    }
+    let httpoption = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      })
+    };
+    var adresseRequest = environment.adressePython + "/delete"
+    this.http.post(adresseRequest, json, httpoption).subscribe(data => {
+      var index = this.items.indexOf(i);
+      this.items.splice(index, 1);  
+    });
+    this.addMoreItems();
 
-  addMoreItems(){
-    this.getHistoriqueHttp(this.authService.currentUser);  
   }
-  
+
+
+  addMoreItems() {
+    this.getHistoriqueHttp(this.authService.currentUser);
+  }
+
   logout() {
     this.authService.logout();
   }
