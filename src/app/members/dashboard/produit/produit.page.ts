@@ -3,8 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Produit } from 'src/app/Produit';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { NavController } from '@ionic/angular';
+
+import { AlertController, NavController } from '@ionic/angular';
+import {Location} from '@angular/common';
 import { NavigationExtras } from '@angular/router';
+
 
 @Component({
   selector: 'app-produit',
@@ -17,7 +20,31 @@ export class ProduitPage implements OnInit {
 
   errorMsg = '';
   produitSearch : Produit;
-  constructor(private route: ActivatedRoute, private http: HttpClient, private navCtrl: NavController) {  console.log(this.bareCode);}
+
+  constructor(private route: ActivatedRoute,private nav: NavController, private http: HttpClient, private alertCtrl: AlertController, private _location: Location) {  console.log(this.bareCode);}
+
+  signal(pCode : number){
+    let json = {
+      code : pCode
+    }
+    console.log("Code signalé :" + pCode);
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    var adresseRequest = environment.adressePython+"/signal"
+    this.http.post(adresseRequest, json, httpoption).subscribe(
+      data=>{
+        if(data['result']=="added"){
+          this.errorMsg = "Le signalement à été prit en compte";  
+        }
+        else if(data['result']=="retour"){
+          this.nav.navigateForward(['members','dashboard']);
+        }
+        console.log(this.errorMsg);
+      }
+    )
+  }
 
 
   ngOnInit() {

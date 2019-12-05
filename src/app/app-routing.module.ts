@@ -8,12 +8,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', loadChildren: './public/login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './public/register/register.module#RegisterPageModule' },
-  { 
-    path: 'members', 
-    canActivate: [AuthGuard],
-    loadChildren: './members/member-routing.module#MemberRoutingModule'
-  },
-  { path: 'register', loadChildren: './public/register/register.module#RegisterPageModule' },
+  { path: 'members', canActivate: [AuthGuard], loadChildren: './members/member-routing.module#MemberRoutingModule'},
+  { path: 'register', loadChildren: './public/register/register.module#RegisterPageModule' }
 ];
  
 @NgModule({

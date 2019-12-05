@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { NavigationExtras } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import { testUserAgent } from '@ionic/core/dist/types/utils/platform';
+import { AlertController } from '@ionic/angular';
 
 const token_key = 'auth-token';
 
@@ -31,9 +31,53 @@ export class DashboardPage implements OnInit {
   compteurBaseDeDonnee = 0;
 
 
-  constructor(private navCtrl: NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) {
-    this.addMoreItems();
+
+  constructor(public alertController: AlertController, private navCtrl : NavController, private authService: AuthenticationService, private http: HttpClient, private barcodeScanner: BarcodeScanner, private storage: Storage) { 
+    //this.doRefresh();
   }
+ 
+  deleteHist(){
+    let json = {
+      user: this.authService.currentUser
+    };
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    var adresseRequest = environment.adressePython+"/deleteHist"
+    this.http.post(adresseRequest, json, httpoption).subscribe(
+      data=>{
+        if(data['result'] == 'delete'){
+          this.doRefresh();
+        }
+      }
+    )
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Suppression !',
+      message: 'Êtes-vous sur de vouloir supprimer votre historique ?',
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Oui',
+          handler: () => {
+            this.deleteHist()
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
 
 
@@ -51,19 +95,20 @@ export class DashboardPage implements OnInit {
       user: this.authService.currentUser
     }
 
-    let httpoption = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
-    var adresseRequest = environment.adressePython + "/addHistorique"
-    this.http.post(adresseRequest, json, httpoption).subscribe(
-      data => {
-        console.log("data" + data);
-        if (data['result'] == "bon") {
+
+    console.log("Le code barre scanné est : "+pBareCode);
+
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    var adresseRequest = environment.adressePython+"/addHistorique"
+    this.http.post(adresseRequest , json, httpoption).subscribe(
+      data=>{
+        if(data['result'] == "bon"){
+          this.doRefresh();
           let produit = this.searchHttp(pBareCode);
-          this.addMoreItems();
+          //this.addMoreItems();
           //this.items.push(produit);
           let navigationExtras: NavigationExtras = {
             queryParams: {
@@ -71,7 +116,6 @@ export class DashboardPage implements OnInit {
             }
           };
           this.navCtrl.navigateForward(['members', 'produit'], navigationExtras);
-          
           
         }
       }
@@ -91,14 +135,12 @@ export class DashboardPage implements OnInit {
     let testProduit
     var adresseRequest = environment.adressePython + "/search"
     this.http.post(adresseRequest, json, httpoption).subscribe(
-      data => {
-        console.log("data" + data);
-        if (data['result'] == "Le produit n'existe pas") {
+      data=>{
+        if(data['result']=="Le produit n'existe pas"){
           this.errorMsg = data['result'];
         }
         else {
           testProduit = data as Produit;
-          console.log(testProduit);
         }
       }
     );
@@ -108,7 +150,6 @@ export class DashboardPage implements OnInit {
 
   loadData(event) {
     setTimeout(() => {
-      console.log('Done');
       event.target.complete();
       this.addMoreItems();
       // App logic to determine if all data is loaded
@@ -122,6 +163,7 @@ export class DashboardPage implements OnInit {
     this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
   }
   ngOnInit() {
+    this.doRefresh();
   }
 
   getHistoriqueHttp(pUser: string) {
@@ -130,18 +172,14 @@ export class DashboardPage implements OnInit {
       debut: this.compteurBaseDeDonnee
     }
 
-    let httpoption = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
-    
-    var adresseRequest = environment.adressePython + "/getHistorique"
+    let httpoption = {headers : new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    })};
+    var adresseRequest = environment.adressePython+"/getHistorique"
     this.http.post(adresseRequest, json, httpoption).subscribe(
-      data => {
-        console.log("data" + data);
-        if (data['result'] == "Il n'y a aucun produit dans votre historique") {
+      data=>{
+        if(data['result']=="Il n'y a aucun produit dans votre historique"){
           this.errorMsg = data['result'];
         }
         else {
@@ -152,8 +190,6 @@ export class DashboardPage implements OnInit {
             compteur++;
           }
           this.compteurBaseDeDonnee += compteur;
-
-          //trier la table items en fonction de la date
         }
       }
     )
@@ -178,6 +214,16 @@ export class DashboardPage implements OnInit {
     this.addMoreItems();
 
   }
+
+
+
+  doRefresh() {
+    console.log("REFREEEEEEEEEESH");
+    this.items = [];
+    this.compteurBaseDeDonnee = 0;
+    this.addMoreItems();
+  }
+
 
 
   addMoreItems() {

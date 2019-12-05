@@ -65,5 +65,21 @@
         /></ng-template>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col size="12">
+          <ng-template [ngIf]="errorMsg != ''"><h1>{{errorMsg}}</h1></ng-template>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="4">
+
+      </ion-col>
+      <ion-col size="4">
+        <ion-button (click)="signal(produitSearch.code)" color="danger">Signaler</ion-button>
+      </ion-col>
+      <ion-col size="4">
+        
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>
