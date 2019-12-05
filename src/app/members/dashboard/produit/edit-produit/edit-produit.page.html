@@ -2,6 +2,11 @@
   <ion-toolbar>
     <ion-back-button slot="start"> </ion-back-button>
     <ion-title>Modification</ion-title>
+    <ion-buttons slot="primary">
+        <ion-button color="green" (click)="updateHttp()">
+          <ion-icon slot="end" name="save" ></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,6 +18,7 @@
         clearInput
         name="nomProduit"
         (ionChange)="modifNomProduit($event)"
+        placeholder="{{produitEdit.nomProduit}}"
       ></ion-input>
     </ion-item>
 
@@ -24,20 +30,36 @@
         interface="popover"
         placeholder="Select One"
       >
-        <ion-select-option value="A">A</ion-select-option>
-        <ion-select-option value="B">B</ion-select-option>
-        <ion-select-option value="C">C</ion-select-option>
-        <ion-select-option value="D">D</ion-select-option>
-        <ion-select-option value="E">E</ion-select-option>
+        <ion-select-option value="a">A</ion-select-option>
+        <ion-select-option value="b">B</ion-select-option>
+        <ion-select-option value="c">C</ion-select-option>
+        <ion-select-option value="d">D</ion-select-option>
+        <ion-select-option value="e">E</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
   <ion-card>
-    <ng-template [ngIf]="produitEdit.urlimage != ''">
+    <div *ngIf="produitEdit.urlimage != ''; else elseBlockPrincipale">
       <img src="{{produitEdit.urlimage}}" />
+    </div>
+    <ng-template #elseBlockPrincipale>
+      <ion-button (click)="picturePrincipale()" color="primary">No img Available</ion-button>
     </ng-template>
+
     <ion-card-header>
-      <ion-card-title>Image principale</ion-card-title>
+      <ion-grid>
+          <ion-row>
+            <ion-col size="9">
+                <ion-card-title>Image principale</ion-card-title>
+            </ion-col>
+            <ion-col size="2">
+                <div *ngIf="produitEdit.urlimage != ''">
+                    <button (click)="delete('p')"class="btn">x</button>
+                </div>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+          </ion-row>
+        </ion-grid>
     </ion-card-header>
 
     <ion-card-content>
@@ -47,25 +69,55 @@
   </ion-card>
   <ion-item>
     <ion-card>
-          <ng-template [ngIf]="produitEdit.urlimageing != null">
-            <img src="{{produitEdit.urlimageing}}" />
-          </ng-template>
-          <ion-card-header>
-            <ion-card-title>Image ingrédients</ion-card-title>
-          </ion-card-header>
-      
-          <ion-card-content>
-            Essayez de prendre en photo la liste des ingrédients en totalité.
-          </ion-card-content>
-        </ion-card>
+      <div *ngIf="produitEdit.urlimageing != ''; else elseBlockIngredient">
+        <img src="{{produitEdit.urlimageing}}" />
+      </div>
+      <ng-template #elseBlockIngredient>
+        <ion-button (click)="pictureIng()" color="primary">No img Available</ion-button>
+      </ng-template>
+      <ion-card-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="9">
+              <ion-card-title>Image ingrédients</ion-card-title>
+            </ion-col>
+            <ion-col size="2">
+                <div *ngIf="produitEdit.urlimageing != ''">
+                    <button (click)="delete('i')"class="btn">x</button>
+                </div>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content>
+        Essayez de prendre en photo la liste des ingrédients en totalité.
+      </ion-card-content>
+    </ion-card>
   </ion-item>
-  
+
   <ion-card>
-    <ng-template [ngIf]="produitEdit.urlimagenut != null">
+    <div *ngIf="produitEdit.urlimagenut != ''; else elseBlockNut">
       <img src="{{produitEdit.urlimagenut}}" />
+    </div>
+    <ng-template #elseBlockNut>
+      <ion-button (click)="pictureNutri()" color="primary">No img Available</ion-button>
     </ng-template>
+
     <ion-card-header>
-      <ion-card-title>Image nutrition</ion-card-title>
+      <ion-grid>
+          <ion-row>
+            <ion-col size="9">
+                <ion-card-title>Image nutrition</ion-card-title>
+            </ion-col>
+            <ion-col size="2">
+                <div *ngIf="produitEdit.urlimagenut != ''">
+                    <button (click)="delete('n')"class="btn">x</button>
+                </div>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+          </ion-row>
+        </ion-grid>
     </ion-card-header>
 
     <ion-card-content>

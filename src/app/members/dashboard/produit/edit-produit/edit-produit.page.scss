@@ -1,10 +1,17 @@
-img{
+#no-img{
     min-height: 100px;
     text-align: center;
     background-color: grey;
     color : white;
     font-weight: bold;
-    margin:auto;
-    display:block;
-
+    vertical-align: middle;
 }
+
+.btn {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: red;
+    font-size: larger;
+    border: 1px solid red;
+  }
