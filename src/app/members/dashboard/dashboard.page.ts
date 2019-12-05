@@ -106,8 +106,8 @@ export class DashboardPage implements OnInit {
     this.http.post(adresseRequest , json, httpoption).subscribe(
       data=>{
         if(data['result'] == "bon"){
-          this.doRefresh();
           let produit = this.searchHttp(pBareCode);
+          this.doRefresh();
           //this.addMoreItems();
           //this.items.push(produit);
           let navigationExtras: NavigationExtras = {

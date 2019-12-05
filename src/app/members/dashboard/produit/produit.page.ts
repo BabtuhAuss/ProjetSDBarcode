@@ -59,6 +59,6 @@ export class ProduitPage implements OnInit {
         produit: JSON.stringify(this.produitSearch)
       }
     };
-    this.navCtrl.navigateForward(['members', 'edit-produit'], navigationExtras);
+    this.nav.navigateForward(['members', 'edit-produit'], navigationExtras);
   }
 }

@@ -88,9 +88,11 @@ export class EditProduitPage implements OnInit {
         this.produitEdit.urlimagesmall = '';
         break;
       case 'n':
+          this.produitEdit.urlimagenut = '';
         // code block
         break;
       case 'i':
+          this.produitEdit.urlimageing = '';
         // code block
         break;
       default:
